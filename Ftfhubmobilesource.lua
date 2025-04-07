@@ -651,6 +651,7 @@ ToggleUI.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleUI.TextScaled = true
 ToggleUI.TextSize = 14.000
 ToggleUI.TextWrapped = true
+ToggleUI.Draggable = true
 ToggleUI.MouseButton1Click:Connect(function()
 	Library:ToggleUI()
 end)
