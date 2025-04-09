@@ -81,7 +81,7 @@ Section2:NewToggle("OutlineESP", "ToggleInfo", function(state)
         outlineESP()
     else
         outlineESP = false
-		outlineESP()
+	outlineESP()
     end
 end)
 Section2:NewToggle("TracersESP", "ToggleInfo", function(state)
