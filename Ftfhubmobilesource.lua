@@ -1,4 +1,3 @@
--- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("ftf hub", "BloodTheme")
 
@@ -10,8 +9,8 @@ local playertoggle = false
 local bestpctoggle = false
 local exitstoggle = false
 local nametoggle = false
-local beastcamtoggle = false
 local outlinetoggle = false
+local beastcamtoggle = false
 
 getgenv().ESPTracers = false
 
@@ -88,9 +87,11 @@ Section2:NewToggle("TracersESP", "ToggleInfo", function(state)
     if state then
         getgenv().ESPTracers =  true
         TracersESP()
+	AssignTracers()
     else
         getgenv().ESPTracers = false
         TracersESP()
+        AssignTracers()
     end
 end)
 Section2:NewToggle("PCEsp", "ToggleInfo", function(state)
@@ -198,11 +199,11 @@ end)
 end
 end)
 
-Section5:NewTextBox("WalkSpeed", "TextboxInfo", function(txt)
-	game.Players.LocalPlayer.Character.Humanoid.Walkspeed = txt
+Section5:NewSlider("WalkSpeed", "SliderInfo", 50, 16, function(s) -- 500 (MaxValue) | 0 (MinValue)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
 end)
-Section5:NewTextBox("JumpPower", "TextboxInfo", function(txt)
-	game.Players.LocalPlayer.Character.Humanoid.Jumppower = txt
+Section5:NewSlider("JumpPower", "SliderInfo", 250, 35, function(s) -- 500 (MaxValue) | 0 (MinValue)
+    game.Players.LocalPlayer.Character.Humanoid.Jumppower = s
 end)
 Section5:NewButton("Rejoin", "ButtonInfo", function()
     -- rejoin		
@@ -365,7 +366,7 @@ function reloadnameESP()
 	local Players = game:GetService("Players")
 
 -- Function to get the current Beast
-function getBeast()
+function GetBeast()
 	local allPlayers = Players:GetPlayers()
 	for _, plr in ipairs(allPlayers) do
 		local character = plr.Character
@@ -419,7 +420,7 @@ local function addNameBillboard(player)
 			spawn(function()
 				repeat
 					wait(0.1)
-					if player == getBeast() then
+					if player == GetBeast() then
 						label.TextColor3 = Color3.fromRGB(255, 0, 0)
 					else
 						label.TextColor3 = Color3.fromRGB(0, 255, 0)
@@ -428,6 +429,23 @@ local function addNameBillboard(player)
 			end)
 		end
 	end
+
+	-- Attach to character
+	if player.Character then
+		onCharacterAdded(player.Character)
+	end
+	player.CharacterAdded:Connect(onCharacterAdded)
+end
+
+-- Run for existing players
+for _, player in ipairs(Players:GetPlayers()) do
+	addNameBillboard(player)
+end
+
+-- Run for new players
+Players.PlayerAdded:Connect(function(player)
+	addNameBillboard(player)
+end)
 end
 
 function outlineESP()
@@ -730,24 +748,7 @@ spawn(function() -- reload esp when game becomes active
 	end)
 end)
 
-spawn(function()
-	-- Attach to character
-	if player.Character then
-		onCharacterAdded(player.Character)
-	end
-	player.CharacterAdded:Connect(onCharacterAdded)
-end
 
--- Run for existing players
-for _, player in ipairs(Players:GetPlayers()) do
-	addNameBillboard(player)
-end
-
--- Run for new players
-Players.PlayerAdded:Connect(function(player)
-	addNameBillboard(player)
-end)
-end
 
 spawn(function() --reload esp when character loads/deloads
 	game:GetService("Players").PlayerAdded:Connect(function(player)
@@ -897,7 +898,7 @@ end
 		end
 	end
 end)
-
+	
 
 -- ToggleUi
 local ScreenGui = Instance.new("ScreenGui")
