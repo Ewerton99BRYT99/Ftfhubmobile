@@ -11,7 +11,6 @@ local bestpctoggle = false
 local exitstoggle = false
 local nametoggle = false
 local outlinetoggle = false
-local beastcamtoggle = false
 
 local neverfailtoggle = false
 local autointeracttoggle = false
